@@ -1,0 +1,254 @@
+Package: infinity-about
+Version: 0.1.3
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: systemsettings, udev, libc6 (>= 2.14), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libstdc++6 (>= 5)
+Filename: pool/main/infinity-about_0.1.3_amd64.deb
+Size: 25712
+MD5sum: 760e39cd49d46cd90cdfbeb180895575
+SHA1: f723f2812ae684938a7ab38432c7faff4eaa4eda
+SHA256: 5d52edaa5bbbc90d65dc4dda7d37b8d2944e8acdeda02fbc721808b5b2a8dcb6
+Section: admin
+Priority: optional
+Description: Infinity about page: Settings > About This Computer
+ The version of Infinity and the computer's hardware in plain words.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-base
+Version: 0.1.68
+Architecture: all
+Maintainer: Infinity <infinity@localhost>
+Depends: systemd, systemd-zram-generator, preload, va-driver-all, wpasupplicant, usbmuxd, libpam-kwallet5, whiptail, infinity-branding, infinity-settings, qml6-module-qtlocation, qml6-module-qtpositioning, qt6-location-plugins, infinity-updates, infinity-about, infinity-security, infinity-dock, infinity-install-app, infinity-camera, infinity-downloads, infinity-taskmanager, kio-extras, ffmpegthumbs, kdegraphics-thumbnailers, power-profiles-daemon, efibootmgr, bluez, bluedevil, libspa-0.2-bluetooth, infinity-cloud, unrar, 7zip, qalculate-qt, okular, cups, cups-filters, ipp-usb, avahi-daemon, libnss-mdns, hplip, print-manager, system-config-printer-common, fwupd, fwupd-signed, steam-devices, ubuntu-drivers-common
+Filename: pool/main/infinity-base_0.1.68_all.deb
+Size: 60172
+MD5sum: 72786ce730aa8f7b994c9e5cda822146
+SHA1: eac5ee6c797667d1bcab0d3c63aafb31bf5de10f
+SHA256: 2e7b5cdffedccfaef785e1e345423765ab00be6a06bda0bbbafe278c8d60ce51
+Section: admin
+Priority: optional
+Description: Infinity base system settings
+ System-wide settings and fixes that make Ubuntu into Infinity.
+ Updated through the Infinity package repository.
+
+Package: infinity-branding
+Version: 0.1.64
+Architecture: all
+Maintainer: Infinity <infinity@localhost>
+Depends: plymouth, plymouth-label, plasma-workspace, libkf6config-bin, kde-config-gtk-style, breeze-gtk-theme, udev, python3, inotify-tools, libglib2.0-bin
+Filename: pool/main/infinity-branding_0.1.64_all.deb
+Size: 4321120
+MD5sum: 482b09e60de28c4144d47b9c4cc9d7a0
+SHA1: 4a60aa896cffb2485c33f1669e6b96575f397880
+SHA256: 6504babd8295f13d6ff7b86992cd60bfb8db72d1386c8230dbb415de1fd56aa4
+Section: misc
+Priority: optional
+Description: Infinity look: boot, login, lock and shut-down screens, desktop theme
+ The Infinity boot screen (Plymouth theme), login screen (SDDM theme),
+ lock screen, shut-down screen and the Infinity global theme for Plasma
+ (colors, wallpaper, layout).
+
+Package: infinity-camera
+Version: 0.1.1
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: qml6-module-qtmultimedia, qml6-module-qtquick-window, qt6-svg-plugins, va-driver-all, libc6 (>= 2.34), libgcc-s1 (>= 3.0), libqt6core6t64 (>= 6.10.2), libqt6gui6 (>= 6.1.2), libqt6multimedia6 (>= 6.6.1), libqt6qml6 (>= 6.6.0), libstdc++6 (>= 5)
+Filename: pool/main/infinity-camera_0.1.1_amd64.deb
+Size: 15196
+MD5sum: 1a17949f99b376d0284e3506a259cc6e
+SHA1: 5cacfb109559d559d234da1ea67833b058df02cf
+SHA256: bae86727bf35da8838a5f921699ed79418737d206242eb9aea95233c93db2dd2
+Section: video
+Priority: optional
+Description: Infinity Camera: photos and videos from the computer's camera
+ Takes photos and records videos with the computer's camera, always in that
+ camera's best format (the highest resolution that still moves smoothly) and
+ at the highest quality. A timer (3 or 10 seconds), a screen flash for photos
+ in the dark, and a switch between cameras. Photos go to Pictures/Camera,
+ videos to Videos/Camera.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-cloud
+Version: 0.1.3
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: systemsettings, plasma-workspace, rclone, fuse3, inotify-tools, xdg-user-dirs, python3, curl, libc6 (>= 2.34), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libkf6statusnotifieritem6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6gui6 (>= 6.1.2), libqt6widgets6 (>= 6.3.0), libstdc++6 (>= 5)
+Filename: pool/main/infinity-cloud_0.1.3_amd64.deb
+Size: 43288
+MD5sum: 104f3d98461c9bf94ebfd0c846bfab80
+SHA1: 78494eff7e35ee06a2c19210192b9c8e416a5762
+SHA256: 0b50a41643ba83c4693471efd5a8443bc5dce4f3acfb3f89e98e5f71e6d02302
+Section: admin
+Priority: optional
+Description: Infinity cloud accounts (Settings > Accounts > Cloud)
+ Connect your own Google Drive, OneDrive or Dropbox: the folders you choose
+ (Desktop, Documents and Pictures to start with) are kept the same on this
+ computer and in the cloud, and the whole drive shows in Files. A cloud icon
+ in the top bar shows the sync while an account is connected.
+ Also lists Users under Accounts in Settings.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-dock
+Version: 0.2.7
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: systemsettings, plasma-workspace, kwin-wayland, systemd, libc6 (>= 2.34), libkf6configcore6 (>= 6.0.0), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6dbus6 (>= 6.3.0), libstdc++6 (>= 5)
+Filename: pool/main/infinity-dock_0.2.7_amd64.deb
+Size: 30596
+MD5sum: d5646b9fc2fbfd3e33dcb004cd0287f1
+SHA1: 1369cc0b58ad15ff1e1c1c566da779457347ac06
+SHA256: 009c04b3ddf82b0e932b68f989dc327fdf1e49345eed8c5839a1f6adc954b0f4
+Section: admin
+Priority: optional
+Description: Infinity dock page (Settings > Dock), the Touchpad page and a quiet lock screen
+ Choose when the dock at the bottom of the screen shows: always, hidden
+ until the mouse reaches the bottom, or hidden when a window covers it.
+ Three fingers left or right on the touchpad switch apps (a KWin script,
+ Settings > Mouse & Touchpad > Touchpad, which replaces KDE's page).
+ While the screen is locked, notifications don't pop up over it (they wait
+ in the history).
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-downloads
+Version: 0.3.9
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: aria2, ffmpeg, yt-dlp, nodejs, python3, curl, qml6-module-qtquick, qml6-module-qtquick-layouts, qml6-module-qtquick-window, qml6-module-qtquick-controls, qml6-module-qtqml-workerscript, libc6 (>= 2.34), libgcc-s1 (>= 3.0), libkf6coreaddons6 (>= 6.0.0), libkf6jobwidgets6 (>= 6.0.0), libkf6notifications6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6dbus6 (>= 6.1.2), libqt6gui6 (>= 6.1.2), libqt6network6 (>= 6.1.2), libqt6qml6 (>= 6.6.0), libqt6quick6 (>= 6.6.0), libqt6widgets6 (>= 6.1.2), libstdc++6 (>= 5)
+Filename: pool/main/infinity-downloads_0.3.9_amd64.deb
+Size: 117780
+MD5sum: ddce38fb1e2229c5861eaebb2feadac3
+SHA1: 47451d849cb645b84ee8e20263c99623b35346b1
+SHA256: df0d4c93a1b16b956f915bd93d8ddffc230b9af26beb59c943b02162b5bd341c
+Section: web
+Priority: optional
+Description: Infinity Downloads: fast downloads and video downloads from Brave
+ Brave's downloads go to the Downloads app (through a Brave extension that
+ Brave installs by itself): up to 8 connections per file (aria2), resumes after
+ a lost connection, a list of everything downloaded, and progress in the
+ notifications. Videos (YouTube and other sites) get a Download button with a
+ choice of quality (yt-dlp, kept up to date daily).
+ The C++ parts are built by distro/build-native.sh from distro/native/, the
+ extension by build-repo.sh from distro/extension/.
+
+Package: infinity-install-app
+Version: 0.3.13
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: apt, dpkg, mawk, coreutils, shared-mime-info, tar, pkexec, polkitd, python3, flatpak, squashfs-tools, libfuse2t64, desktop-file-utils, kde-cli-tools, systemsettings, qml6-module-org-kde-kcmutils, qml6-module-org-kde-kirigami, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-window, libc6 (>= 2.34), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6gui6 (>= 6.1.2), libqt6network6 (>= 6.1.2), libqt6qml6 (>= 6.6.0), libstdc++6 (>= 5)
+Conflicts: kmenuedit
+Replaces: kmenuedit
+Filename: pool/main/infinity-install-app_0.3.13_amd64.deb
+Size: 94412
+MD5sum: 6c0744df521f4fbbe205a3a651d2e315
+SHA1: fe164c5d030c0eea773ec0d2b6e128d520c2fdb9
+SHA256: 1729b01e2f6114d6b785541a7e23a251c4751122d06622e616d6761df4e00ac0
+Section: admin
+Priority: optional
+Description: Infinity Install App and Settings > Apps
+ Double-click a downloaded app (a .deb, a Flatpak from Flathub's Install
+ button, or an AppImage) to see what it is and install it. A .deb takes one
+ password; it fetches what the app needs and turns on 32-bit support for
+ apps that need it (Steam, Wine, most games). Flatpak apps come from
+ Flathub and update daily. AppImages go to ~/Applications and get an entry
+ in the app menu (they need FUSE 2).
+ Settings > Apps lists the installed apps with their size and removes them
+ (the parts of Infinity and the default apps are kept), and searches Flathub to install new ones.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-installer
+Version: 0.1.15
+Architecture: all
+Maintainer: Infinity <infinity@localhost>
+Depends: calamares, squashfs-tools, os-prober, cryptsetup, rsync, ntfs-3g, dosfstools, e2fsprogs, kpartx,
+ qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts,
+ qml6-module-qtquick-window, qml6-module-qtquick-templates, qml6-module-qtqml-workerscript,
+ qml6-module-qtquick-shapes, sudo, pciutils
+Filename: pool/main/infinity-installer_0.1.15_all.deb
+Size: 35312
+MD5sum: 4f5e7bac21b006381d9bd2e26834b30d
+SHA1: 8eb1f0a8707c01f3adeb9a34403bc3f830c4ce6b
+SHA256: 5469e7c3342558ec143654184673bb5a6e7babae6fb9902bced49dd2c7dce909
+Section: admin
+Priority: optional
+Description: Infinity installer (live USB only)
+ Settings and screens for Calamares, the program that puts Infinity
+ on a computer from the live USB stick. It removes itself from the
+ installed system.
+
+Package: infinity-security
+Version: 0.1.4
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: clamav-daemon, clamav-freshclam, ufw, systemsettings, libc6 (>= 2.34), libkf6configcore6 (>= 6.0.0), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libkf6notifications6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6dbus6 (>= 6.1.2), libqt6gui6 (>= 6.1.2), libstdc++6 (>= 5.2)
+Filename: pool/main/infinity-security_0.1.4_amd64.deb
+Size: 74696
+MD5sum: a7600417afde0ad3c8761bdb6a3bc721
+SHA1: d5460c2323d86707c4890a4284586c2b2a6a3063
+SHA256: 9873253ebed3bc3c40d58231d0cad7061ccaa4bc7997ecc65e13355422b2f04b
+Section: admin
+Priority: optional
+Description: Infinity security: Settings > Security, firewall, virus scan
+ The Security page in System Settings (firewall switch, virus scan of the
+ user's files or the whole computer, Quarantine) and the agent that checks
+ new downloads. The firewall is on from the start; the virus scanner (clamd)
+ only runs while it is needed.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-settings
+Version: 0.1.9
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: systemsettings, plasma-workspace, wireplumber, cups-client, qml6-module-org-kde-kirigami, qml6-module-qtquick-layouts, qml6-module-qtquick-controls, qml6-module-qtquick-shapes, qml6-module-qtquick-window, libc6 (>= 2.34), libgcc-s1 (>= 3.0), libkf6configcore6 (>= 6.0.0), libkf6coreaddons6 (>= 6.0.0), libkf6kcmutils6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libqt6core6t64 (>= 6.10.2), libqt6dbus6 (>= 6.8.2), libqt6gui6 (>= 6.1.2), libqt6network6 (>= 6.1.2), libqt6qml6 (>= 6.6.0), libqt6quickcontrols2-6 (>= 6.6.0), libqt6quickwidgets6 (>= 6.6.0), libqt6widgets6 (>= 6.1.2), libstdc++6 (>= 5)
+Filename: pool/main/infinity-settings_0.1.9_amd64.deb
+Size: 357228
+MD5sum: c2a86fb7402569a5f605379515cea57d
+SHA1: bca781b7a93f82e55c24398c2a1d9cec55bc1d41
+SHA256: 481c32702b8b24ffb1f3407ec550914a80e8ade5a2bebd29b29ebb54578bc29b
+Section: admin
+Priority: optional
+Description: Infinity Settings
+ Settings opens on a home page of live tiles (Wi-Fi, Bluetooth, battery,
+ sound, Light and Night, security, updates, storage, apps, account, devices),
+ each one changes things right away and grows into its page. Pages come in
+ Infinity's order (connections first, About This Computer last); the
+ pages themselves are KDE's and Infinity's page plugins. It takes the
+ place of KDE's System Settings: "systemsettings kcm_x" opens that page here.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-taskmanager
+Version: 0.1.6
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: pciutils, qml6-module-org-kde-kirigami, qml6-module-qtquick-layouts, qml6-module-qtquick-window, qml6-module-qtqml-workerscript, systemd, dpkg, libc6 (>= 2.34), libgcc-s1 (>= 3.0), libqt6core6t64 (>= 6.10.2), libqt6gui6 (>= 6.1.2), libqt6network6 (>= 6.1.2), libqt6qml6 (>= 6.6.0), libqt6quick6 (>= 6.6.0), libstdc++6 (>= 5)
+Filename: pool/main/infinity-taskmanager_0.1.6_amd64.deb
+Size: 115120
+MD5sum: 8892d14818dcd4a68a652ebf728254d1
+SHA1: e2b3a2ea848a68981976135d54545e45ad6522d8
+SHA256: 610234c56f4ca2dd09551bc1018a4194993b8959f656bee50b5f8ed231867ea3
+Section: admin
+Priority: optional
+Description: Infinity Task Manager: what the computer is doing (like Windows')
+ The open apps and background tasks with the processor, memory and disk each
+ one uses, and End task; the computer's load (processor, memory, disk,
+ internet) over the last minute; the startup apps with how much each one
+ slows the start, and a switch to turn it off; the system's services.
+ Opens with Ctrl+Shift+Esc.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
+Package: infinity-updates
+Version: 0.1.9
+Architecture: amd64
+Maintainer: Infinity <infinity@localhost>
+Depends: packagekit, systemsettings, fwupd, python3, libc6 (>= 2.34), libkf6configcore6 (>= 6.0.0), libkf6coreaddons6 (>= 6.0.0), libkf6idletime6 (>= 6.0.0), libkf6kcmutilscore6 (>= 6.0.0), libkf6kcmutilsquick6 (>= 6.0.0), libkf6notifications6 (>= 6.0.0), libpackagekitqt6-2 (>= 1.1.1), libqt6core6t64 (>= 6.10.2), libqt6dbus6 (>= 6.1.2), libqt6gui6 (>= 6.1.2), libstdc++6 (>= 5)
+Filename: pool/main/infinity-updates_0.1.9_amd64.deb
+Size: 75936
+MD5sum: 6fbb576fdf350090d5d3cbe6fddb8dba
+SHA1: 63bdc68720d2205d84c0eaf11cf30812d9af0b38
+SHA256: d7dab0383eda81e18c470328fa36a1adec3ccb1e16fb720e5770bb9e810d8352
+Section: admin
+Priority: optional
+Description: Infinity updates: Settings > Updates and automatic updates
+ The Updates page in System Settings (check, see what changes, install,
+ Automatic or Manual mode) and the background agent that checks for
+ updates and, in Automatic mode, installs them while the computer is idle.
+ The C++ parts are built by distro/build-native.sh from distro/native/.
+
