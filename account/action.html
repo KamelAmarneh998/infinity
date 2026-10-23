@@ -1,7 +1,12 @@
 <!doctype html>
-<!-- Infinity Account: where the links in Infinity's e-mails open (Firebase's
-     "action URL"): choose a new password, or confirm the e-mail. Published with
-     the package repository (build-repo.sh) at <REPO_URL>/account/action.html. -->
+<!-- Infinity Account: where the "Forgot your PIN?" e-mail link opens. The computer's
+     sign-in screen asked the Infinity Account service (accountd) to send it: Firebase
+     e-mails a sign-in link (EMAIL_SIGNIN) whose continue URL is this page with
+     s = the computer's reset id and e = the account's e-mail. "Yes, it's me" signs in
+     to Firebase with the link (which proves the person reads that mailbox) and writes
+     resets/<s> in Firestore; the rules let only a signed-in, verified owner of that
+     e-mail write it, with that e-mail. The computer reads it and lets the person choose
+     a new PIN. Published by build-repo.sh at <REPO_URL>/account/action.html. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -17,9 +22,9 @@ body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding
 .mark { width: 56px; height: 28px; justify-self: center; }
 h1 { margin: 0; font-weight: 400; font-size: 24px; text-align: center; }
 p { margin: 0; color: var(--muted); text-align: center; }
-input { width: 100%; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--ink); font: inherit; }
-input:focus { outline: none; border-color: #7D97FF; }
+b { color: var(--ink); font-weight: 500; }
 button { padding: 12px; border: 0; border-radius: 999px; background: var(--royal); color: white; font: inherit; font-weight: 500; cursor: pointer; }
+button.plain { background: transparent; color: var(--muted); }
 button:disabled { opacity: 0.5; cursor: default; }
 .msg { min-height: 1.5em; font-size: 14px; text-align: center; }
 .msg.bad { color: var(--bad); } .msg.good { color: var(--good); }
@@ -29,61 +34,60 @@ button:disabled { opacity: 0.5; cursor: default; }
 <body>
 <main class="card">
   <svg class="mark" viewBox="0 0 48 24" fill="none" stroke="#9DB0FF" stroke-width="3" aria-hidden="true"><path d="M24 12c-4-5.2-7.2-8-11-8a8 8 0 0 0 0 16c3.8 0 7-2.8 11-8zm0 0c4 5.2 7.2 8 11 8a8 8 0 0 0 0-16c-3.8 0-7 2.8-11 8z"/></svg>
-  <h1 id="title">Infinity Account</h1>
+  <h1 id="title">Forgot your PIN?</h1>
   <p id="text">Checking the link…</p>
-  <form id="form" hidden>
-    <div style="display:grid;gap:10px">
-      <input id="pw1" type="password" autocomplete="new-password" placeholder="New password (6 characters or more)" required minlength="6">
-      <input id="pw2" type="password" autocomplete="new-password" placeholder="The new password again" required minlength="6">
-      <button id="save" type="submit">Save the new password</button>
-    </div>
-  </form>
-  <div class="msg" id="msg"></div>
+  <button id="yes" hidden>Yes, it's me</button>
+  <button id="no" class="plain" hidden>It wasn't me</button>
+  <div id="msg" class="msg"></div>
 </main>
 <script>
+const KEY = "AIzaSyBV5w8N2YHEkJTg3p8jDyJKQnKKBIEfqJo";
+const PROJECT = "infinityos-desktop";
 const q = new URLSearchParams(location.search);
-const mode = q.get("mode"), code = q.get("oobCode"), key = q.get("apiKey") || "AIzaSyBV5w8N2YHEkJTg3p8jDyJKQnKKBIEfqJo";
 const $ = id => document.getElementById(id);
-const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "msg " + cls; };
-async function call(method, body) {
-  const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${encodeURIComponent(key)}`,
-    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-  const d = await r.json();
-  if (!r.ok) throw new Error((d.error && d.error.message || "").split(" ")[0]);
-  return d;
+const say = (title, text) => { $("title").textContent = title; $("text").textContent = text; $("yes").hidden = $("no").hidden = true; };
+
+// Firebase's own link page forwards here with mode, oobCode and our continue URL's s and e
+// (sometimes inside continueUrl).
+let s = q.get("s"), e = q.get("e");
+if ((!s || !e) && q.get("continueUrl")) {
+  try { const c = new URL(q.get("continueUrl")).searchParams; s = s || c.get("s"); e = e || c.get("e"); } catch (_) {}
 }
-const plain = e => ({ EXPIRED_OOB_CODE: "This link has expired. Ask for a new one on the sign-in screen.",
-  INVALID_OOB_CODE: "This link was already used or isn't complete. Ask for a new one on the sign-in screen.",
-  WEAK_PASSWORD: "Choose a longer password (at least 6 characters).",
-  PASSWORD_DOES_NOT_MEET_REQUIREMENTS: "Choose a stronger password." }[e.message] || "Something went wrong. Try again in a moment.");
+const code = q.get("oobCode");
 
-(async () => {
-  if (!code) { $("text").textContent = "This page opens from the links in Infinity's e-mails."; return; }
-  if (mode === "resetPassword") {
-    $("title").textContent = "Choose a new password";
-    try {
-      const d = await call("resetPassword", { oobCode: code });
-      $("text").textContent = "For " + d.email + ". Then sign in to your computer with it.";
-      $("form").hidden = false; $("pw1").focus();
-    } catch (e) { $("text").textContent = plain(e); }
-  } else if (mode === "verifyEmail" || mode === "recoverEmail") {
-    $("title").textContent = mode === "verifyEmail" ? "Confirm your e-mail" : "Your e-mail is back";
-    try { await call("update", { oobCode: code }); $("text").textContent = mode === "verifyEmail" ? "Done: your e-mail is confirmed. You can close this page." : "Your Infinity Account uses its old e-mail again."; }
-    catch (e) { $("text").textContent = plain(e); }
-  } else { $("text").textContent = "This link isn't one Infinity knows."; }
-})();
+if (q.get("mode") !== "signIn" || !code || !s || !e || !/^[A-Za-z0-9_-]{16,64}$/.test(s)) {
+  say("Infinity Account", "This link isn't complete. Open it straight from the e-mail, or ask the computer for a new one.");
+} else {
+  $("text").innerHTML = "";
+  $("text").append("Someone at your Infinity computer asked to choose a new PIN for ");
+  const who = document.createElement("b"); who.textContent = e; $("text").append(who, ". Was it you?");
+  $("yes").hidden = $("no").hidden = false;
+}
 
-$("form").addEventListener("submit", async ev => {
-  ev.preventDefault();
-  if ($("pw1").value !== $("pw2").value) { say("The two passwords are not the same.", "bad"); return; }
-  $("save").disabled = true; say("Saving…");
+$("no").onclick = () => say("Nothing changed", "Your PIN stays the same. You can close this page.");
+
+$("yes").onclick = async () => {
+  $("yes").disabled = true;
+  $("msg").className = "msg"; $("msg").textContent = "One moment…";
   try {
-    await call("resetPassword", { oobCode: code, newPassword: $("pw1").value });
-    $("form").hidden = true; $("title").textContent = "Your password is changed";
-    $("text").textContent = "Sign in to your computer with the new password. It needs the internet the first time.";
-    say("");
-  } catch (e) { say(plain(e), "bad"); $("save").disabled = false; }
-});
+    const r = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithEmailLink?key=" + KEY, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: e, oobCode: code }) });
+    const d = await r.json();
+    if (!r.ok || !d.idToken) throw new Error((d.error && d.error.message) || "link");
+    const w = await fetch("https://firestore.googleapis.com/v1/projects/" + PROJECT + "/databases/(default)/documents/resets?documentId=" + encodeURIComponent(s), {
+      method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + d.idToken },
+      body: JSON.stringify({ fields: { email: { stringValue: (d.email || e).toLowerCase() } } }) });
+    if (!w.ok && w.status !== 409) throw new Error("store " + w.status);   // 409: already confirmed
+    $("msg").textContent = "";
+    say("Done", "Go back to your computer: it asks for a new PIN now.");
+  } catch (err) {
+    $("yes").disabled = false;
+    $("msg").className = "msg bad";
+    $("msg").textContent = /INVALID_OOB_CODE|EXPIRED_OOB_CODE/.test(err.message)
+      ? "This link was used already or is too old. Ask the computer for a new one."
+      : "That didn't work. Check the internet and try again.";
+  }
+};
 </script>
 </body>
 </html>
