@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- Infinity Account: where the links in Infinity's e-mails open (Firebase's
+     "action URL"): choose a new password, or confirm the e-mail. Published with
+     the package repository (build-repo.sh) at <REPO_URL>/account/action.html. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infinity Account</title>
+<style>
+:root { --bg: #070B1C; --card: #101630; --ink: #E8ECFA; --muted: #8A93B8; --royal: #4169E1; --line: rgba(125,151,255,0.22); --bad: #FF6B7A; --good: #5ED6A0; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; color: var(--ink);
+  font: 16px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(60% 50% at 75% 20%, rgba(65,105,225,0.35), transparent 70%), radial-gradient(50% 50% at 10% 90%, rgba(139,92,246,0.18), transparent 70%), var(--bg); }
+.card { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,0.45); }
+.mark { width: 56px; height: 28px; justify-self: center; }
+h1 { margin: 0; font-weight: 400; font-size: 24px; text-align: center; }
+p { margin: 0; color: var(--muted); text-align: center; }
+input { width: 100%; padding: 12px 16px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.06); color: var(--ink); font: inherit; }
+input:focus { outline: none; border-color: #7D97FF; }
+button { padding: 12px; border: 0; border-radius: 999px; background: var(--royal); color: white; font: inherit; font-weight: 500; cursor: pointer; }
+button:disabled { opacity: 0.5; cursor: default; }
+.msg { min-height: 1.5em; font-size: 14px; text-align: center; }
+.msg.bad { color: var(--bad); } .msg.good { color: var(--good); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="card">
+  <svg class="mark" viewBox="0 0 48 24" fill="none" stroke="#9DB0FF" stroke-width="3" aria-hidden="true"><path d="M24 12c-4-5.2-7.2-8-11-8a8 8 0 0 0 0 16c3.8 0 7-2.8 11-8zm0 0c4 5.2 7.2 8 11 8a8 8 0 0 0 0-16c-3.8 0-7 2.8-11 8z"/></svg>
+  <h1 id="title">Infinity Account</h1>
+  <p id="text">Checking the link…</p>
+  <form id="form" hidden>
+    <div style="display:grid;gap:10px">
+      <input id="pw1" type="password" autocomplete="new-password" placeholder="New password (6 characters or more)" required minlength="6">
+      <input id="pw2" type="password" autocomplete="new-password" placeholder="The new password again" required minlength="6">
+      <button id="save" type="submit">Save the new password</button>
+    </div>
+  </form>
+  <div class="msg" id="msg"></div>
+</main>
+<script>
+const q = new URLSearchParams(location.search);
+const mode = q.get("mode"), code = q.get("oobCode"), key = q.get("apiKey") || "AIzaSyBV5w8N2YHEkJTg3p8jDyJKQnKKBIEfqJo";
+const $ = id => document.getElementById(id);
+const say = (t, cls = "") => { $("msg").textContent = t; $("msg").className = "msg " + cls; };
+async function call(method, body) {
+  const r = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${encodeURIComponent(key)}`,
+    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  const d = await r.json();
+  if (!r.ok) throw new Error((d.error && d.error.message || "").split(" ")[0]);
+  return d;
+}
+const plain = e => ({ EXPIRED_OOB_CODE: "This link has expired. Ask for a new one on the sign-in screen.",
+  INVALID_OOB_CODE: "This link was already used or isn't complete. Ask for a new one on the sign-in screen.",
+  WEAK_PASSWORD: "Choose a longer password (at least 6 characters).",
+  PASSWORD_DOES_NOT_MEET_REQUIREMENTS: "Choose a stronger password." }[e.message] || "Something went wrong. Try again in a moment.");
+
+(async () => {
+  if (!code) { $("text").textContent = "This page opens from the links in Infinity's e-mails."; return; }
+  if (mode === "resetPassword") {
+    $("title").textContent = "Choose a new password";
+    try {
+      const d = await call("resetPassword", { oobCode: code });
+      $("text").textContent = "For " + d.email + ". Then sign in to your computer with it.";
+      $("form").hidden = false; $("pw1").focus();
+    } catch (e) { $("text").textContent = plain(e); }
+  } else if (mode === "verifyEmail" || mode === "recoverEmail") {
+    $("title").textContent = mode === "verifyEmail" ? "Confirm your e-mail" : "Your e-mail is back";
+    try { await call("update", { oobCode: code }); $("text").textContent = mode === "verifyEmail" ? "Done: your e-mail is confirmed. You can close this page." : "Your Infinity Account uses its old e-mail again."; }
+    catch (e) { $("text").textContent = plain(e); }
+  } else { $("text").textContent = "This link isn't one Infinity knows."; }
+})();
+
+$("form").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  if ($("pw1").value !== $("pw2").value) { say("The two passwords are not the same.", "bad"); return; }
+  $("save").disabled = true; say("Saving…");
+  try {
+    await call("resetPassword", { oobCode: code, newPassword: $("pw1").value });
+    $("form").hidden = true; $("title").textContent = "Your password is changed";
+    $("text").textContent = "Sign in to your computer with the new password. It needs the internet the first time.";
+    say("");
+  } catch (e) { say(plain(e), "bad"); $("save").disabled = false; }
+});
+</script>
+</body>
+</html>
