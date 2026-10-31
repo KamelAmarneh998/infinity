@@ -1,0 +1,14 @@
+:root { --bg: #070B1C; --card: #101630; --ink: #E8ECFA; --muted: #8A93B8; --royal: #4169E1; --line: rgba(125,151,255,0.22); color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); font: 16px/1.65 "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(60% 50% at 80% 0%, rgba(65,105,225,0.35), transparent 70%), var(--bg); padding: 48px 16px; }
+main { max-width: 720px; margin: 0 auto; display: grid; gap: 18px; }
+.mark { width: 64px; height: 32px; }
+h1 { margin: 0; font-weight: 400; font-size: 34px; }
+h2 { margin: 18px 0 0; font-weight: 500; font-size: 20px; }
+p, li { color: var(--muted); margin: 0; }
+b { color: var(--ink); font-weight: 500; }
+a { color: #9DB0FF; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; display: grid; gap: 8px; }
+ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+footer { color: var(--muted); font-size: 14px; margin-top: 12px; }
