@@ -1,0 +1,93 @@
+<!doctype html>
+<!-- Infinity Account: where the "Forgot your PIN?" e-mail link opens. The computer's
+     sign-in screen asked the Infinity Account service (accountd) to send it: Firebase
+     e-mails a sign-in link (EMAIL_SIGNIN) whose continue URL is this page with
+     s = the computer's reset id and e = the account's e-mail. "Yes, it's me" signs in
+     to Firebase with the link (which proves the person reads that mailbox) and writes
+     resets/<s> in Firestore; the rules let only a signed-in, verified owner of that
+     e-mail write it, with that e-mail. The computer reads it and lets the person choose
+     a new PIN. Published by build-repo.sh at <REPO_URL>/account/action.html. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infinity Account</title>
+<style>
+:root { --bg: #070B1C; --card: #101630; --ink: #E8ECFA; --muted: #8A93B8; --royal: #4169E1; --line: rgba(125,151,255,0.22); --bad: #FF6B7A; --good: #5ED6A0; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; color: var(--ink);
+  font: 16px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: radial-gradient(60% 50% at 75% 20%, rgba(65,105,225,0.35), transparent 70%), radial-gradient(50% 50% at 10% 90%, rgba(139,92,246,0.18), transparent 70%), var(--bg); }
+.card { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 24px; display: grid; gap: 14px; box-shadow: 0 30px 80px rgba(0,0,0,0.45); }
+.mark { width: 56px; height: 28px; justify-self: center; }
+h1 { margin: 0; font-weight: 400; font-size: 24px; text-align: center; }
+p { margin: 0; color: var(--muted); text-align: center; }
+b { color: var(--ink); font-weight: 500; }
+button { padding: 12px; border: 0; border-radius: 999px; background: var(--royal); color: white; font: inherit; font-weight: 500; cursor: pointer; }
+button.plain { background: transparent; color: var(--muted); }
+button:disabled { opacity: 0.5; cursor: default; }
+.msg { min-height: 1.5em; font-size: 14px; text-align: center; }
+.msg.bad { color: var(--bad); } .msg.good { color: var(--good); }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main class="card">
+  <svg class="mark" viewBox="0 0 48 24" fill="none" stroke="#9DB0FF" stroke-width="3" aria-hidden="true"><path d="M24 12c-4-5.2-7.2-8-11-8a8 8 0 0 0 0 16c3.8 0 7-2.8 11-8zm0 0c4 5.2 7.2 8 11 8a8 8 0 0 0 0-16c-3.8 0-7 2.8-11 8z"/></svg>
+  <h1 id="title">Forgot your PIN?</h1>
+  <p id="text">Checking the link…</p>
+  <button id="yes" hidden>Yes, it's me</button>
+  <button id="no" class="plain" hidden>It wasn't me</button>
+  <div id="msg" class="msg"></div>
+</main>
+<script>
+const KEY = "AIzaSyBV5w8N2YHEkJTg3p8jDyJKQnKKBIEfqJo";
+const PROJECT = "infinityos-desktop";
+const q = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const say = (title, text) => { $("title").textContent = title; $("text").textContent = text; $("yes").hidden = $("no").hidden = true; };
+
+// Firebase's own link page forwards here with mode, oobCode and our continue URL's s and e
+// (sometimes inside continueUrl).
+let s = q.get("s"), e = q.get("e");
+if ((!s || !e) && q.get("continueUrl")) {
+  try { const c = new URL(q.get("continueUrl")).searchParams; s = s || c.get("s"); e = e || c.get("e"); } catch (_) {}
+}
+const code = q.get("oobCode");
+
+if (q.get("mode") !== "signIn" || !code || !s || !e || !/^[A-Za-z0-9_-]{16,64}$/.test(s)) {
+  say("Infinity Account", "This link isn't complete. Open it straight from the e-mail, or ask the computer for a new one.");
+} else {
+  $("text").innerHTML = "";
+  $("text").append("Someone at your Infinity computer asked to choose a new PIN for ");
+  const who = document.createElement("b"); who.textContent = e; $("text").append(who, ". Was it you?");
+  $("yes").hidden = $("no").hidden = false;
+}
+
+$("no").onclick = () => say("Nothing changed", "Your PIN stays the same. You can close this page.");
+
+$("yes").onclick = async () => {
+  $("yes").disabled = true;
+  $("msg").className = "msg"; $("msg").textContent = "One moment…";
+  try {
+    const r = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithEmailLink?key=" + KEY, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: e, oobCode: code }) });
+    const d = await r.json();
+    if (!r.ok || !d.idToken) throw new Error((d.error && d.error.message) || "link");
+    const w = await fetch("https://firestore.googleapis.com/v1/projects/" + PROJECT + "/databases/(default)/documents/resets?documentId=" + encodeURIComponent(s), {
+      method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + d.idToken },
+      body: JSON.stringify({ fields: { email: { stringValue: (d.email || e).toLowerCase() } } }) });
+    if (!w.ok && w.status !== 409) throw new Error("store " + w.status);   // 409: already confirmed
+    $("msg").textContent = "";
+    say("Done", "Go back to your computer: it asks for a new PIN now.");
+  } catch (err) {
+    $("yes").disabled = false;
+    $("msg").className = "msg bad";
+    $("msg").textContent = /INVALID_OOB_CODE|EXPIRED_OOB_CODE/.test(err.message)
+      ? "This link was used already or is too old. Ask the computer for a new one."
+      : "That didn't work. Check the internet and try again.";
+  }
+};
+</script>
+</body>
+</html>

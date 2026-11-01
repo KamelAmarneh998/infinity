@@ -1,0 +1,11 @@
+Origin: Infinity
+Label: Infinity
+Suite: genesis
+Codename: genesis
+Date: Sun, 01 Nov 2026 23:33:57 +0000
+Architectures: amd64
+Components: main
+Description: Infinity packages
+SHA256:
+ b02bd10ddaa480f2702906d39f2d73f8fcb7042987f0a015f03eca1a16eab442 22258 main/binary-amd64/Packages
+ 4239ad5d1afaa543a823fb9c1367b10fd6e4f4598495a5098c6b50fca02dd376 7337 main/binary-amd64/Packages.gz
