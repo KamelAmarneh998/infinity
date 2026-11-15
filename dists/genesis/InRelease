@@ -1,0 +1,21 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: Infinity
+Label: Infinity
+Suite: genesis
+Codename: genesis
+Date: Sun, 15 Nov 2026 22:16:20 +0000
+Architectures: amd64
+Components: main
+Description: Infinity packages
+SHA256:
+ 158a77f6e99e4c821d7bd70bd8a2831fb29c2f62a304340b3a65a97f8da5f839 24499 main/binary-amd64/Packages
+ ff63fd76efe20b352719b9f55f3f28a4156f5c439fac59dc0359e8685e575398 7901 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRHLWBxIc2eNaqoj9vjVjcXaZdj/AUCavovNAAKCRDjVjcXaZdj
+/IvmAQCkUmc+qvBCmsYNQL4f9qhKnlhuMwO/3XkIoqT/Qhn3VwEAn4j5MeKL5p8e
+j59ms7RFPPMu3e+M8VtfSadWiIIzpw8=
+=zdNh
+-----END PGP SIGNATURE-----
